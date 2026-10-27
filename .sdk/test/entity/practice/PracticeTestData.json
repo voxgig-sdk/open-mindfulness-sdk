@@ -1,0 +1,77 @@
+{
+  "existing": {
+    "practice": {
+      "PRACTICE00": {
+        "audio_url": "s78",
+        "canonical_url": "s79",
+        "category": "s7a",
+        "excerpt": "s7b",
+        "id": "PRACTICE00",
+        "read_time_minutes": 125,
+        "related_practices": [],
+        "slug": "s7f",
+        "title": "s80",
+        "track_id": "TRACK01",
+        "type": "s82",
+        "updated_at": "s83"
+      },
+      "PRACTICE01": {
+        "audio_url": "sf0",
+        "canonical_url": "sf1",
+        "category": "sf2",
+        "excerpt": "sf3",
+        "id": "PRACTICE01",
+        "read_time_minutes": 245,
+        "related_practices": [],
+        "slug": "sf7",
+        "title": "sf8",
+        "track_id": "TRACK01",
+        "type": "sfa",
+        "updated_at": "sfb"
+      },
+      "PRACTICE02": {
+        "audio_url": "s168",
+        "canonical_url": "s169",
+        "category": "s16a",
+        "excerpt": "s16b",
+        "id": "PRACTICE02",
+        "read_time_minutes": 365,
+        "related_practices": [],
+        "slug": "s16f",
+        "title": "s170",
+        "track_id": "TRACK01",
+        "type": "s172",
+        "updated_at": "s173"
+      }
+    }
+  },
+  "new": {
+    "practice": {
+      "practice_ref01": {
+        "audio_url": "s1e0",
+        "canonical_url": "s1e1",
+        "category": "s1e2",
+        "excerpt": "s1e3",
+        "read_time_minutes": 485,
+        "related_practices": [],
+        "slug": "s1e7",
+        "title": "s1e8",
+        "track_id": "TRACK01",
+        "type": "s1ea",
+        "updated_at": "s1eb"
+      }
+    }
+  },
+  "requests": {
+    "GET /v1/practices": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /v1/practices/{slug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

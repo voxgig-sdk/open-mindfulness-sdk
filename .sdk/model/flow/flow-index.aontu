@@ -1,0 +1,12 @@
+# Flows
+
+@"./BasicBlogFlow.aontu"
+@"./BasicCategoryFlow.aontu"
+@"./BasicCitationDetailFlow.aontu"
+@"./BasicGameDetailFlow.aontu"
+@"./BasicGlossaryFlow.aontu"
+@"./BasicHealthFlow.aontu"
+@"./BasicPanchaVikasResourceFlow.aontu"
+@"./BasicPodcastEpisodeDetailFlow.aontu"
+@"./BasicPracticeFlow.aontu"
+@"./BasicResourceFlow.aontu"

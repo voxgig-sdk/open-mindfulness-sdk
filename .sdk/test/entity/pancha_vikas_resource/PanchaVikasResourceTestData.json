@@ -1,0 +1,48 @@
+{
+  "existing": {
+    "pancha_vikas_resource": {
+      "PANCHA_VIKAS_RESOURCE00": {
+        "download_url": "s3c",
+        "id": "PANCHA_VIKAS_RESOURCE00",
+        "source_url": "s3e",
+        "summary": "s3f",
+        "title": "s40",
+        "type": "s41"
+      },
+      "PANCHA_VIKAS_RESOURCE01": {
+        "download_url": "s78",
+        "id": "PANCHA_VIKAS_RESOURCE01",
+        "source_url": "s7a",
+        "summary": "s7b",
+        "title": "s7c",
+        "type": "s7d"
+      },
+      "PANCHA_VIKAS_RESOURCE02": {
+        "download_url": "sb4",
+        "id": "PANCHA_VIKAS_RESOURCE02",
+        "source_url": "sb6",
+        "summary": "sb7",
+        "title": "sb8",
+        "type": "sb9"
+      }
+    }
+  },
+  "new": {
+    "pancha_vikas_resource": {
+      "pancha_vikas_resource_ref01": {
+        "download_url": "sf0",
+        "source_url": "sf2",
+        "summary": "sf3",
+        "title": "sf4",
+        "type": "sf5"
+      }
+    }
+  },
+  "requests": {
+    "GET /v1/panchavikas/resources": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

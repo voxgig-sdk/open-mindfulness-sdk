@@ -1,0 +1,1183 @@
+openapi: 3.0.3
+info:
+  title: THC Open Mindfulness Resources API
+  version: "1.0.0"
+  description: >
+    A free, public, read-only REST API exposing The Holistic Care's open
+    mindfulness resources — research citations (whitepapers), a
+    plain-language glossary, free mindfulness games, free guided-audio
+    practices, blog post excerpts, The Holistic Care Podcast episodes
+    (English and Hindi), and the public PanchaVikas early-years framework — as structured JSON. No authentication required.
+    A unified `/v1/resources` browse endpoint and a `/v1/search` endpoint
+    aggregate across every family at once. Blog endpoints expose
+    metadata/excerpts only — full article content remains on the canonical
+    The Holistic Care website. See `/docs` for a fair-use/attribution note
+    and a versioning policy alongside this reference.
+
+
+    Licensing note: this OpenAPI spec and the repository's code are MIT
+    licensed (see the `license` field below and `LICENSE` in the repo). The
+    *content* this API returns (research summaries, glossary entries, game
+    descriptions, guided-practice metadata, blog excerpts, podcast episode
+    summaries, PanchaVikas materials) is NOT covered by that MIT license — it remains Copyright ©
+    The Holistic Care, all rights reserved, unless a specific resource states
+    otherwise. See `LICENSING.md` in the repository for the full breakdown of
+    software license vs. API access terms vs. content rights vs. attribution.
+  contact:
+    name: The Holistic Care
+    url: https://www.theholisticcare.com
+    email: info@theholisticcare.com
+  license:
+    name: MIT (code only — see LICENSING.md for content rights)
+    url: https://github.com/mohanagc/thc-open-mindfulness-api/blob/main/LICENSE
+servers:
+  - url: https://api.theholisticcare.com
+    description: Production (only environment currently deployed)
+paths:
+  /health:
+    get:
+      summary: Service status
+      description: >
+        Not versioned under /v1 (a health check is deliberately outside the
+        versioning contract). No rate limiting, no caching.
+      responses:
+        '200':
+          description: Service is up.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /v1/whitepapers:
+    get:
+      summary: List research citations
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: topic
+          in: query
+          schema:
+            type: string
+            enum: [mindfulness, meditation, yoga, sleep, nonduality, children, anxiety, physiology]
+        - name: study_type
+          in: query
+          schema:
+            type: string
+            enum: [rct, meta-analysis, observational, cohort, clinical-trial, physiological, guideline]
+      responses:
+        '200':
+          description: A paginated list of research citations. Cached at the edge for 1 hour (see /docs#caching).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CitationListResponse'
+        '400':
+          $ref: '#/components/responses/InvalidParameter'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/whitepapers/{slug}:
+    get:
+      summary: Get a single research citation by slug
+      parameters:
+        - $ref: '#/components/parameters/slug'
+      responses:
+        '200':
+          description: A single research citation, including related terms and posts.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CitationDetailResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/glossary:
+    get:
+      summary: List glossary terms
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: pillar
+          in: query
+          schema:
+            type: string
+            enum: [nonduality, yoga, meditation, kundalini, ayurveda, general-wisdom]
+      responses:
+        '200':
+          description: A paginated list of glossary terms.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlossaryListResponse'
+        '400':
+          $ref: '#/components/responses/InvalidParameter'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/glossary/{slug}:
+    get:
+      summary: Get a single glossary term by slug
+      parameters:
+        - $ref: '#/components/parameters/slug'
+      responses:
+        '200':
+          description: A single glossary term, including its extended explanation and related terms/posts.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlossaryDetailResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/mindfulness-games:
+    get:
+      summary: List free mindfulness games
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: audience
+          in: query
+          schema:
+            type: string
+            enum: [children, teens, adults, educators, parents]
+        - name: skill
+          in: query
+          schema:
+            type: string
+            enum: [attention, body-awareness, breathwork, cognitive-reframing, emotional-regulation, gratitude, grounding, loving-kindness, mindful-listening, nondual-awareness, relaxation, self-compassion, sleep]
+      responses:
+        '200':
+          description: A paginated list of the free mindfulness games (`pagination.total` gives the current count).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameListResponse'
+        '400':
+          $ref: '#/components/responses/InvalidParameter'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/mindfulness-games/{slug}:
+    get:
+      summary: Get a single mindfulness game by slug
+      parameters:
+        - $ref: '#/components/parameters/slug'
+      responses:
+        '200':
+          description: A single mindfulness game.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameDetailResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/practices:
+    get:
+      summary: List free guided-audio practices (Stillness Library)
+      description: >
+        Free tracks only. The Stillness Library also has paid tracks; those
+        are never exposed by this API under any circumstances (enforced in
+        the query itself, not just by the apiPublic flag).
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [mindfulness, children, breathwork, nondual-awareness, yoga-nidra, students, sleep]
+      responses:
+        '200':
+          description: A paginated list of free practices.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PracticeListResponse'
+        '400':
+          $ref: '#/components/responses/InvalidParameter'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/practices/{slug}:
+    get:
+      summary: Get a single free practice by slug
+      parameters:
+        - $ref: '#/components/parameters/slug'
+      responses:
+        '200':
+          description: A single free practice, including related free practices.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PracticeDetailResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/blog:
+    get:
+      summary: List blog post excerpts
+      description: >
+        Blog endpoints expose metadata/excerpts only. Full article content
+        remains on the canonical The Holistic Care website. The response
+        shape is deliberately minimal (title, excerpt, tags, canonical_url
+        only) and does not include id, slug, type, or updated_at, unlike
+        every other resource in this API.
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: tag
+          in: query
+          description: Fuzzy-matches against the post's tags.
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Free-text search across title, excerpt, and tags only. Never searches article body.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A paginated list of blog post excerpts.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPostListResponse'
+        '400':
+          $ref: '#/components/responses/InvalidParameter'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/blog/{slug}:
+    get:
+      summary: Get a single blog post excerpt by slug
+      parameters:
+        - $ref: '#/components/parameters/slug'
+      responses:
+        '200':
+          description: A single blog post excerpt.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPostDetailResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/podcast/episodes:
+    get:
+      summary: List released podcast episodes (English and Hindi)
+      description: >
+        Released episodes of The Holistic Care Podcast. Discovery metadata and
+        links only (title, short summary, duration, release date, website and
+        YouTube URLs); transcripts and companion guides are never returned.
+        Episodes appear on their release day.
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: lang
+          in: query
+          schema:
+            type: string
+            enum: [en, hi]
+        - name: season
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: A paginated list of podcast episodes, ordered by season, episode, language.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PodcastEpisodeListResponse'
+        '400':
+          $ref: '#/components/responses/InvalidParameter'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/podcast/episodes/{id}:
+    get:
+      summary: Get a single podcast episode by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Stable episode id, e.g. PC-S02E03-EN (case-insensitive).
+          schema:
+            type: string
+            pattern: '^PC-S[0-9]{1,3}E[0-9]{1,3}-(EN|HI)$'
+      responses:
+        '200':
+          description: A single podcast episode.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PodcastEpisodeDetailResponse'
+        '400':
+          $ref: '#/components/responses/InvalidParameter'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/panchavikas/resources:
+    get:
+      summary: List public PanchaVikas pathways and the framework guide download
+      description: >
+        The 5 public pathway summaries plus the framework guide PDF
+        download. Never exposes FAQs, school pricing tiers, or
+        curriculum/session-plan content. Not paginated (6 fixed items).
+      responses:
+        '200':
+          description: The 5 pathways plus the guide download resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PanchaVikasResourceListResponse'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/resources:
+    get:
+      summary: Browse every public resource family at once
+      description: >
+        A discovery/browse layer over 7 families (blog, mindfulness games,
+        guided practices, research citations, glossary terms, podcast
+        episodes, PanchaVikas).
+        Not a replacement for the dedicated per-family endpoints — call those
+        directly for the full field set of a specific family.
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [blog, mindfulness_game, guided_practice, research, glossary, podcast_episode, panchavikas_pathway, panchavikas_download]
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: audience
+          in: query
+          schema:
+            type: string
+        - name: skill
+          in: query
+          schema:
+            type: string
+        - name: age_min
+          in: query
+          schema:
+            type: integer
+        - name: age_max
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A paginated list of normalized public resources.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceListResponse'
+        '400':
+          description: >
+            Invalid `type` value (`invalid_type`), or a malformed `limit`/
+            `offset` value (`invalid_parameter`) — see /docs#pagination.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/search:
+    get:
+      summary: Free-text search across every public resource family
+      description: >
+        Case-insensitive substring match over the same public metadata
+        /v1/resources exposes (title, summary, category, tags) — never
+        article bodies or private/premium content. Not built on
+        Elasticsearch, Algolia, or embeddings; a simple in-memory match,
+        documented as correct at current content volumes rather than
+        overengineered for V1.
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: Search text. Required; a missing or empty (or whitespace-only) value returns 400.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: A paginated list of matching normalized public resources.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceListResponse'
+        '400':
+          description: >
+            Missing or empty `q` parameter (`missing_query`), or a malformed
+            `limit`/`offset` value (`invalid_parameter`) — see
+            /docs#pagination.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v1/categories:
+    get:
+      summary: List the current valid topic/pillar filter values
+      description: >
+        An interim, partial taxonomy — it only reflects the `topic` and
+        `pillar` fields that already exist on researchCitation/glossaryTerm.
+        Not a substitute for /v1/resources or /v1/search's own filters.
+      responses:
+        '200':
+          description: Distinct topics and pillars currently in use.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriesResponse'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  parameters:
+    limit:
+      name: limit
+      in: query
+      description: >
+        Max records to return (default 20). A non-numeric, non-integer, or
+        non-positive value (e.g. `abc`, `1.5`, `0`, `-1`) returns a 400
+        `invalid_parameter` error rather than silently falling back to the
+        default. A value above the documented maximum (100) is the one
+        exception: it is NOT an error, it is silently clamped to 100 — see
+        /docs#pagination for the full rationale for that one intentional
+        exception.
+      schema:
+        type: integer
+        default: 20
+        maximum: 100
+    offset:
+      name: offset
+      in: query
+      description: >
+        Records to skip (default 0). A non-numeric, non-integer, or negative
+        value (e.g. `abc`, `1.5`, `-1`) returns a 400 `invalid_parameter`
+        error rather than silently falling back to 0 — see /docs#pagination.
+      schema:
+        type: integer
+        default: 0
+    slug:
+      name: slug
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: >
+        No public record exists at that slug. A record that exists but is a
+        draft, unpublished, or not opted into the API returns this exact
+        same response as a slug that doesn't exist at all — never a
+        different error that would reveal a private record's existence.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: >
+        Too many requests from this IP recently (best-effort ~60 req/min;
+        see /docs#rate-limiting for the honest limitations of this
+        enforcement on serverless infrastructure).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InvalidParameter:
+      description: >
+        A malformed `limit` or `offset` value (non-numeric, non-integer, a
+        non-positive `limit`, or a negative `offset`) — see
+        /docs#pagination. Every endpoint below that accepts `limit`/`offset`
+        can return this.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [ok]
+        version:
+          type: string
+          example: v1
+        time:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Short, machine-readable identifier. See /docs#errors for the full list.
+              example: not_found
+            message:
+              type: string
+              description: Human-readable, safe to show a developer. Never a stack trace or internal detail.
+      example:
+        error:
+          code: not_found
+          message: 'No public blog post found for slug "example-slug".'
+    Pagination:
+      type: object
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        total:
+          type: integer
+    Meta:
+      type: object
+      description: Present on every successful response.
+      properties:
+        generated_at:
+          type: string
+          format: date-time
+        provider:
+          type: string
+          example: The Holistic Care
+        source:
+          type: string
+          example: https://www.theholisticcare.com
+    Citation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: >-
+            Deterministic public ID in the form "research:<slug>". Never the
+            raw Sanity `_id`.
+          example: "research:goyal-2014-meditation-programs"
+        slug:
+          type: string
+        type:
+          type: string
+          enum: [research_citation]
+        title:
+          type: string
+        authors:
+          type: string
+        year:
+          type: integer
+        journal:
+          type: string
+        study_type:
+          type: string
+        sample_size:
+          type: string
+        topic:
+          type: string
+        summary:
+          type: string
+        key_finding:
+          type: string
+        limitations:
+          type: string
+          nullable: true
+        source_url:
+          type: string
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+      example:
+        id: "research:goyal-2014-meditation-programs"
+        slug: "goyal-2014-meditation-programs"
+        type: "research_citation"
+        title: "Meditation Programs for Psychological Stress and Well-Being"
+        authors: "Goyal M, Singh S, Sibinga EMS, et al."
+        year: 2014
+        journal: "JAMA Internal Medicine"
+        study_type: "meta-analysis"
+        sample_size: "3,515 participants across 47 trials"
+        topic: "mindfulness"
+        summary: "A meta-analysis of 47 randomized trials of meditation programs for psychological stress and well-being."
+        key_finding: "Moderate evidence of improved anxiety, depression, and pain outcomes."
+        limitations: "Most trials had a moderate risk of bias and few compared meditation with active treatments."
+        source_url: "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1809754"
+        updated_at: "2026-09-01T00:00:00.000Z"
+    CitationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Citation'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    CitationDetail:
+      allOf:
+        - $ref: '#/components/schemas/Citation'
+        - type: object
+          properties:
+            related_posts:
+              type: array
+              items:
+                $ref: '#/components/schemas/RelatedRef'
+            related_terms:
+              type: array
+              items:
+                $ref: '#/components/schemas/RelatedTermRef'
+    CitationDetailResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CitationDetail'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    RelatedRef:
+      type: object
+      properties:
+        slug:
+          type: string
+        title:
+          type: string
+    RelatedTermRef:
+      type: object
+      properties:
+        slug:
+          type: string
+        title:
+          type: string
+    GlossaryTerm:
+      type: object
+      properties:
+        id:
+          type: string
+          description: >-
+            Deterministic public ID in the form "glossary:<slug>". Never the
+            raw Sanity `_id`.
+          example: "glossary:pranayama"
+        slug:
+          type: string
+        type:
+          type: string
+          enum: [glossary_term]
+        title:
+          type: string
+        pillar:
+          type: string
+        summary:
+          type: string
+        etymology:
+          type: string
+          nullable: true
+        also_known_as:
+          type: array
+          nullable: true
+          items:
+            type: string
+        updated_at:
+          type: string
+          format: date-time
+      example:
+        id: "glossary:pranayama"
+        slug: "pranayama"
+        type: "glossary_term"
+        title: "Pranayama"
+        pillar: "yoga"
+        summary: "The yogic practice of consciously regulating the breath."
+        etymology: "Sanskrit: prana (life force/breath) + ayama (extension, restraint)."
+        also_known_as: ["breathwork", "breath control"]
+        updated_at: "2026-09-01T00:00:00.000Z"
+    GlossaryListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GlossaryTerm'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    GlossaryTermDetail:
+      allOf:
+        - $ref: '#/components/schemas/GlossaryTerm'
+        - type: object
+          properties:
+            extended_explanation:
+              description: A small Portable Text block array (Sanity's rich-text format), not plain HTML or Markdown.
+              type: array
+              nullable: true
+              items:
+                type: object
+            related_terms:
+              type: array
+              items:
+                $ref: '#/components/schemas/RelatedTermRef'
+            related_posts:
+              type: array
+              items:
+                $ref: '#/components/schemas/RelatedRef'
+    GlossaryDetailResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GlossaryTermDetail'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    Game:
+      type: object
+      properties:
+        id:
+          type: string
+          description: >-
+            The stable public game ID (same value as `api_id`), in the form
+            "MG-*". Never the raw Sanity `_id`.
+          example: "MG-001"
+        slug:
+          type: string
+        type:
+          type: string
+          enum: [mindfulness_game]
+        api_id:
+          type: string
+        title:
+          type: string
+        url:
+          type: string
+        icon:
+          type: string
+        tag:
+          type: string
+        description:
+          type: string
+        free:
+          type: boolean
+        keywords:
+          type: array
+          items:
+            type: string
+        audiences:
+          type: array
+          items:
+            type: string
+        age_min:
+          type: integer
+          nullable: true
+        age_max:
+          type: integer
+          nullable: true
+        duration_minutes:
+          type: integer
+          nullable: true
+        skills:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: string
+          format: date-time
+      example:
+        id: "MG-001"
+        slug: "breathing-buddy"
+        type: "mindfulness_game"
+        api_id: "MG-001"
+        title: "Breathing Buddy"
+        url: "https://www.theholisticcare.com/games/breathing-buddy.html"
+        icon: "🫧"
+        tag: "Breathing"
+        description: "A gentle breathing pacer for young children."
+        free: true
+        keywords: ["breathing", "calm", "kids"]
+        audiences: ["children"]
+        age_min: 5
+        age_max: 12
+        duration_minutes: 5
+        skills: ["breathwork"]
+        updated_at: "2026-09-24T00:00:00.000Z"
+    GameListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    GameDetailResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Game'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    Practice:
+      type: object
+      properties:
+        id:
+          type: string
+          description: >-
+            The stable public track ID (same value as `track_id`), in the
+            form "SL-*". Never the raw Sanity `_id`.
+          example: "SL-041"
+        slug:
+          type: string
+        type:
+          type: string
+          enum: [practice]
+        track_id:
+          type: string
+        title:
+          type: string
+        category:
+          type: string
+        excerpt:
+          type: string
+        audio_url:
+          type: string
+          description: Direct link to the MP3 file (Cloudflare R2). Never proxied.
+        read_time_minutes:
+          type: integer
+        canonical_url:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+      example:
+        id: "SL-041"
+        slug: "letting-go-of-the-day"
+        type: "practice"
+        track_id: "SL-041"
+        title: "Letting Go of the Day"
+        category: "sleep"
+        excerpt: "A short wind-down practice for releasing the events of the day before sleep."
+        audio_url: "https://files.theholisticcare.com/stillness-library-free/letting-go-of-the-day.mp3"
+        read_time_minutes: 6
+        canonical_url: "https://www.theholisticcare.com/stillness-library/letting-go-of-the-day"
+        updated_at: "2026-09-05T00:00:00.000Z"
+    PracticeListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Practice'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    PracticeDetail:
+      allOf:
+        - $ref: '#/components/schemas/Practice'
+        - type: object
+          properties:
+            related_practices:
+              description: Free practices only — a paid track can never appear here even as a reference.
+              type: array
+              items:
+                $ref: '#/components/schemas/RelatedRef'
+    PracticeDetailResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PracticeDetail'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    BlogPost:
+      type: object
+      description: >
+        Deliberately minimal by design — no id, slug, type, or updated_at, unlike every
+        other schema in this API. Never expand this shape without explicit approval.
+      properties:
+        title:
+          type: string
+        excerpt:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+          description: Always an array, even when the post has no tags (never null).
+        canonical_url:
+          type: string
+      example:
+        title: "Mindfulness for Anxiety: A Complete Guide"
+        excerpt: "A practical, evidence-informed guide to using mindfulness for anxiety."
+        tags: ["mindfulness", "anxiety"]
+        canonical_url: "https://www.theholisticcare.com/blog/mindfulness-for-anxiety"
+    BlogPostListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlogPost'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    BlogPostDetailResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/BlogPost'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    PodcastEpisode:
+      type: object
+      description: >
+        A released episode of The Holistic Care Podcast. `id` is deterministic
+        (PC-S<season>E<episode>-<EN|HI>) and never changes. English and Hindi
+        versions share `slug`, so use `id` to identify an episode.
+      properties:
+        id:
+          type: string
+          example: PC-S02E03-EN
+        type:
+          type: string
+          enum: [podcast_episode]
+        slug:
+          type: string
+        title:
+          type: string
+        short_title:
+          type: string
+          nullable: true
+        language:
+          type: string
+          enum: [en, hi]
+        season_number:
+          type: integer
+        season_title:
+          type: string
+          nullable: true
+        episode_number:
+          type: integer
+        summary:
+          type: string
+          nullable: true
+          description: The episode's short quick-answer summary.
+        key_question:
+          type: string
+          nullable: true
+        audience:
+          type: string
+          nullable: true
+        duration_iso:
+          type: string
+          nullable: true
+          example: PT1M42S
+        duration_seconds:
+          type: integer
+          nullable: true
+        release_date:
+          type: string
+          format: date
+          nullable: true
+        url:
+          type: string
+          format: uri
+          description: The episode page on theholisticcare.com.
+        youtube_url:
+          type: string
+          format: uri
+          nullable: true
+        alternate_language_id:
+          type: string
+          description: The same episode in the other language.
+        updated_at:
+          type: string
+          format: date-time
+    PodcastEpisodeListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PodcastEpisode'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    PodcastEpisodeDetailResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PodcastEpisode'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    PanchaVikasResource:
+      type: object
+      description: >
+        Either a pathway summary (type panchavikas_pathway) or the framework guide download
+        (type panchavikas_download, which additionally has download_url).
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [panchavikas_pathway, panchavikas_download]
+        title:
+          type: string
+        summary:
+          type: string
+        download_url:
+          type: string
+          description: Present only on the panchavikas_download item.
+        source_url:
+          type: string
+      example:
+        id: "PV-pathway-prithvi"
+        type: "panchavikas_pathway"
+        title: "Prithvi"
+        summary: "Ground & Grow: Body, senses, stability, health, independence and nature connection."
+        source_url: "https://www.theholisticcare.com/panchavikas"
+    PanchaVikasResourceListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PanchaVikasResource'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    Resource:
+      type: object
+      description: >
+        The common normalized shape used by /v1/resources and /v1/search across all 7
+        families. Fields not applicable to a given resource's type are null rather than
+        fabricated. `id` is populated for every resource, using each family's existing
+        stable public identifier where one already exists (mindfulness_game uses its
+        `MG-*` api_id, guided_practice uses its `SL-*` track_id, podcast_episode uses
+        its `PC-S01E01-EN` id, panchavikas_* uses its `PV-*` id), or a deterministic `type:slug` pair otherwise (e.g. `blog:<slug>`,
+        `research:<slug>`, `glossary:<slug>`) — never a raw Sanity `_id`. `slug` is
+        populated for every type except panchavikas_pathway/panchavikas_download, which
+        have no real slug field and are always null there. A blog-type resource still
+        always has `category` set to null (unlike id/slug, which changed 2026-09-25 —
+        see HANDOFF.md), matching the fact that blog posts have no equivalent taxonomy
+        field exposed elsewhere in this API. Note this Resource shape (used only by
+        /v1/resources and /v1/search) is intentionally richer than the dedicated
+        /v1/blog endpoint's own response, which still omits id/slug/type/updated_at
+        entirely per Mohan's original instruction for that endpoint specifically.
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        slug:
+          type: string
+          nullable: true
+        type:
+          type: string
+          enum: [blog, mindfulness_game, guided_practice, research, glossary, podcast_episode, panchavikas_pathway, panchavikas_download]
+        summary:
+          type: string
+          nullable: true
+        category:
+          type: string
+          nullable: true
+        tags:
+          type: array
+          nullable: true
+          items:
+            type: string
+        audiences:
+          type: array
+          nullable: true
+          items:
+            type: string
+        age_min:
+          type: integer
+          nullable: true
+        age_max:
+          type: integer
+          nullable: true
+        duration_minutes:
+          type: integer
+          nullable: true
+        skills:
+          type: array
+          nullable: true
+          items:
+            type: string
+        access:
+          type: string
+          nullable: true
+          description: e.g. "free". Never "paid" — no paid content is ever exposed by this API.
+        source_url:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+      example:
+        id: "MG-001"
+        title: "Breathing Buddy"
+        slug: "breathing-buddy"
+        type: "mindfulness_game"
+        summary: "A gentle breathing pacer for young children."
+        category: "Breathing"
+        tags: ["breathing", "calm", "kids"]
+        audiences: ["children"]
+        age_min: 5
+        age_max: 12
+        duration_minutes: 5
+        skills: ["breathwork"]
+        access: "free"
+        source_url: "https://www.theholisticcare.com/games/breathing-buddy.html"
+        updated_at: "2026-09-24T00:00:00.000Z"
+    ResourceListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    CategoriesResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            whitepapers:
+              type: object
+              properties:
+                topics:
+                  type: array
+                  items:
+                    type: string
+            glossary:
+              type: object
+              properties:
+                pillars:
+                  type: array
+                  items:
+                    type: string
+            note:
+              type: string
+        meta:
+          $ref: '#/components/schemas/Meta'
+      example:
+        data:
+          whitepapers:
+            topics: ["mindfulness", "meditation", "yoga"]
+          glossary:
+            pillars: ["nonduality", "yoga", "meditation"]
+          note: "Interim taxonomy covering only fields that exist today."

@@ -1,0 +1,22 @@
+# BasicPanchaVikasResourceFlow
+
+main: kit: flow: BasicPanchaVikasResourceFlow:
+{
+  entity: "pancha_vikas_resource",
+  kind: "basic",
+  name: "BasicPanchaVikasResourceFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "pancha_vikas_resource_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicPanchaVikasResourceFlow"
+}

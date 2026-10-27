@@ -1,0 +1,64 @@
+# Entity: category
+
+main: kit: entity: category: {
+
+  alias: field: {}
+
+  fields: {
+    glossary: {
+      h: "Glossary"
+      n: "glossary"
+      r: false
+      t: "`$OBJECT`"
+    }
+    note: {
+      h: "Note"
+      n: "note"
+      r: false
+      t: "`$STRING`"
+    }
+    whitepapers: {
+      h: "Whitepapers"
+      n: "whitepapers"
+      r: false
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "category"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /v1/categories"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/v1/categories"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "categories"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

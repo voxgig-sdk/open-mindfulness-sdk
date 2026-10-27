@@ -1,0 +1,105 @@
+{
+  "existing": {
+    "podcast_episode_detail": {
+      "PODCAST_EPISODE_DETAIL00": {
+        "alternate_language_id": "ALTERNATE_LANGUAGE01",
+        "audience": "sbf",
+        "duration_iso": "sc0",
+        "duration_seconds": 193,
+        "episode_number": 194,
+        "id": "PODCAST_EPISODE_DETAIL00",
+        "key_question": "sc4",
+        "language": "sc5",
+        "release_date": "sc6",
+        "season_number": 199,
+        "season_title": "sc8",
+        "short_title": "sc9",
+        "slug": "sca",
+        "summary": "scb",
+        "title": "scc",
+        "type": "scd",
+        "updated_at": "sce",
+        "url": "scf",
+        "youtube_url": "sd0"
+      },
+      "PODCAST_EPISODE_DETAIL01": {
+        "alternate_language_id": "ALTERNATE_LANGUAGE01",
+        "audience": "s17d",
+        "duration_iso": "s17e",
+        "duration_seconds": 383,
+        "episode_number": 384,
+        "id": "PODCAST_EPISODE_DETAIL01",
+        "key_question": "s182",
+        "language": "s183",
+        "release_date": "s184",
+        "season_number": 389,
+        "season_title": "s186",
+        "short_title": "s187",
+        "slug": "s188",
+        "summary": "s189",
+        "title": "s18a",
+        "type": "s18b",
+        "updated_at": "s18c",
+        "url": "s18d",
+        "youtube_url": "s18e"
+      },
+      "PODCAST_EPISODE_DETAIL02": {
+        "alternate_language_id": "ALTERNATE_LANGUAGE01",
+        "audience": "s23b",
+        "duration_iso": "s23c",
+        "duration_seconds": 573,
+        "episode_number": 574,
+        "id": "PODCAST_EPISODE_DETAIL02",
+        "key_question": "s240",
+        "language": "s241",
+        "release_date": "s242",
+        "season_number": 579,
+        "season_title": "s244",
+        "short_title": "s245",
+        "slug": "s246",
+        "summary": "s247",
+        "title": "s248",
+        "type": "s249",
+        "updated_at": "s24a",
+        "url": "s24b",
+        "youtube_url": "s24c"
+      }
+    }
+  },
+  "new": {
+    "podcast_episode_detail": {
+      "podcast_episode_detail_ref01": {
+        "alternate_language_id": "ALTERNATE_LANGUAGE01",
+        "audience": "s2f9",
+        "duration_iso": "s2fa",
+        "duration_seconds": 763,
+        "episode_number": 764,
+        "key_question": "s2fe",
+        "language": "s2ff",
+        "release_date": "s300",
+        "season_number": 769,
+        "season_title": "s302",
+        "short_title": "s303",
+        "slug": "s304",
+        "summary": "s305",
+        "title": "s306",
+        "type": "s307",
+        "updated_at": "s308",
+        "url": "s309",
+        "youtube_url": "s30a"
+      }
+    }
+  },
+  "requests": {
+    "GET /v1/podcast/episodes": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /v1/podcast/episodes/{id}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

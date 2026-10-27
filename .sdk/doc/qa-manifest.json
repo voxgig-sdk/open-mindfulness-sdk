@@ -1,0 +1,43 @@
+{
+  "files": [
+    "SUMMARY.md"
+  ],
+  "config": ".sdk/doc/qa/vale.ini",
+  "routes": {},
+  "quoted": {
+    "SUMMARY.md": [
+      "> A free, public, read-only REST API exposing The Holistic Care&#39;s open mindfulness resources, research citations (whitepapers), a plain-language glossary, free mindfulness games, free guided-audio practices, blog post excerpts, The Holistic Care Podcast episodes (English and Hindi), and the public PanchaVikas early-years framework, as structured JSON. No authentication required. A unified `/v1/resources` browse endpoint and a `/v1/search` endpoint aggregate across every family at once. Blog endpoints expose metadata/excerpts only, full article content remains on the canonical The Holistic Care website. See `/docs` for a fair-use/attribution note and a versioning policy alongside this reference.\n>\n> Licensing note: this OpenAPI spec and the repository&#39;s code are MIT licensed (see the `license` field below and `LICENSE` in the repo). The *content* this API returns (research summaries, glossary entries, game descriptions, guided-practice metadata, blog excerpts, podcast episode summaries, PanchaVikas materials) is NOT covered by that MIT license, it remains Copyright © The Holistic Care, all rights reserved, unless a specific resource states otherwise. See `LICENSING.md` in the repository for the full breakdown of software license vs. API access terms vs. content rights vs. attribution.",
+      "A paginated list of blog post excerpts.",
+      "A paginated list of free practices.",
+      "A paginated list of glossary terms.",
+      "A paginated list of matching normalized public resources.",
+      "A paginated list of normalized public resources",
+      "A paginated list of podcast episodes, ordered by season, episode, language.",
+      "A paginated list of research citations. Cached at the edge for 1 hour (see /docs#caching).",
+      "A paginated list of the free mindfulness games (`pagination.total` gives the current count).",
+      "A single blog post excerpt",
+      "A single free practice, including related free practices",
+      "A single glossary term, including its extended explanation and related terms/posts",
+      "A single mindfulness game",
+      "A single podcast episode",
+      "A single research citation, including related terms and posts",
+      "A small Portable Text block array (Sanity&#39;s rich-text format), not plain HTML or Markdown.",
+      "Always an array, even when the post has no tags (never null).",
+      "Deterministic public ID in the form &quot;glossary:&lt;slug&gt;&quot;. Never the raw Sanity `_id`.",
+      "Deterministic public ID in the form &quot;research:&lt;slug&gt;&quot;. Never the raw Sanity `_id`.",
+      "Direct link to the MP3 file (Cloudflare R2). Never proxied.",
+      "Distinct topics and pillars currently in use",
+      "Free practices only, a paid track can never appear here even as a reference.",
+      "Present only on the `panchavikas_download` item.",
+      "Production (only environment currently deployed)",
+      "Service is up",
+      "The 5 pathways plus the guide download resource",
+      "The episode page on theholisticcare.com.",
+      "The episode&#39;s short quick-answer summary.",
+      "The same episode in the other language.",
+      "The stable public game ID (same value as `api_id`), in the form &quot;MG-*&quot;. Never the raw Sanity `_id`.",
+      "The stable public track ID (same value as `track_id`), in the form &quot;SL-*&quot;. Never the raw Sanity `_id`.",
+      "for example &quot;free&quot;. Never &quot;paid&quot;, no paid content is ever exposed by this API."
+    ]
+  }
+}

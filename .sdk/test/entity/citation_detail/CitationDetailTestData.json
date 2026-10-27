@@ -1,0 +1,97 @@
+{
+  "existing": {
+    "citation_detail": {
+      "CITATION_DETAIL00": {
+        "authors": "saa",
+        "id": "CITATION_DETAIL00",
+        "journal": "sac",
+        "key_finding": "sad",
+        "limitations": "sae",
+        "related_posts": [],
+        "related_terms": [],
+        "sample_size": "sb1",
+        "slug": "sb2",
+        "source_url": "sb3",
+        "study_type": "sb4",
+        "summary": "sb5",
+        "title": "sb6",
+        "topic": "sb7",
+        "type": "sb8",
+        "updated_at": "sb9",
+        "year": 186
+      },
+      "CITATION_DETAIL01": {
+        "authors": "s154",
+        "id": "CITATION_DETAIL01",
+        "journal": "s156",
+        "key_finding": "s157",
+        "limitations": "s158",
+        "related_posts": [],
+        "related_terms": [],
+        "sample_size": "s15b",
+        "slug": "s15c",
+        "source_url": "s15d",
+        "study_type": "s15e",
+        "summary": "s15f",
+        "title": "s160",
+        "topic": "s161",
+        "type": "s162",
+        "updated_at": "s163",
+        "year": 356
+      },
+      "CITATION_DETAIL02": {
+        "authors": "s1fe",
+        "id": "CITATION_DETAIL02",
+        "journal": "s200",
+        "key_finding": "s201",
+        "limitations": "s202",
+        "related_posts": [],
+        "related_terms": [],
+        "sample_size": "s205",
+        "slug": "s206",
+        "source_url": "s207",
+        "study_type": "s208",
+        "summary": "s209",
+        "title": "s20a",
+        "topic": "s20b",
+        "type": "s20c",
+        "updated_at": "s20d",
+        "year": 526
+      }
+    }
+  },
+  "new": {
+    "citation_detail": {
+      "citation_detail_ref01": {
+        "authors": "s2a8",
+        "journal": "s2aa",
+        "key_finding": "s2ab",
+        "limitations": "s2ac",
+        "related_posts": [],
+        "related_terms": [],
+        "sample_size": "s2af",
+        "slug": "s2b0",
+        "source_url": "s2b1",
+        "study_type": "s2b2",
+        "summary": "s2b3",
+        "title": "s2b4",
+        "topic": "s2b5",
+        "type": "s2b6",
+        "updated_at": "s2b7",
+        "year": 696
+      }
+    }
+  },
+  "requests": {
+    "GET /v1/whitepapers": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /v1/whitepapers/{slug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

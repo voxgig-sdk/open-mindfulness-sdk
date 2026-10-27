@@ -1,0 +1,89 @@
+{
+  "existing": {
+    "resource": {
+      "RESOURCE00": {
+        "access": "s96",
+        "age_max": 151,
+        "age_min": 152,
+        "audiences": [],
+        "category": "s9a",
+        "duration_minutes": 155,
+        "id": "RESOURCE00",
+        "skills": [],
+        "slug": "s9e",
+        "source_url": "s9f",
+        "summary": "sa0",
+        "tags": [],
+        "title": "sa2",
+        "type": "sa3",
+        "updated_at": "sa4"
+      },
+      "RESOURCE01": {
+        "access": "s12c",
+        "age_max": 301,
+        "age_min": 302,
+        "audiences": [],
+        "category": "s130",
+        "duration_minutes": 305,
+        "id": "RESOURCE01",
+        "skills": [],
+        "slug": "s134",
+        "source_url": "s135",
+        "summary": "s136",
+        "tags": [],
+        "title": "s138",
+        "type": "s139",
+        "updated_at": "s13a"
+      },
+      "RESOURCE02": {
+        "access": "s1c2",
+        "age_max": 451,
+        "age_min": 452,
+        "audiences": [],
+        "category": "s1c6",
+        "duration_minutes": 455,
+        "id": "RESOURCE02",
+        "skills": [],
+        "slug": "s1ca",
+        "source_url": "s1cb",
+        "summary": "s1cc",
+        "tags": [],
+        "title": "s1ce",
+        "type": "s1cf",
+        "updated_at": "s1d0"
+      }
+    }
+  },
+  "new": {
+    "resource": {
+      "resource_ref01": {
+        "access": "s258",
+        "age_max": 601,
+        "age_min": 602,
+        "audiences": [],
+        "category": "s25c",
+        "duration_minutes": 605,
+        "skills": [],
+        "slug": "s260",
+        "source_url": "s261",
+        "summary": "s262",
+        "tags": [],
+        "title": "s264",
+        "type": "s265",
+        "updated_at": "s266"
+      }
+    }
+  },
+  "requests": {
+    "GET /v1/search": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /v1/resources": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

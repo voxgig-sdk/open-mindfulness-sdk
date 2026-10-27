@@ -1,0 +1,238 @@
+# Entity: game_detail
+
+main: kit: entity: game_detail: {
+
+  alias: field: {}
+
+  fields: {
+    age_max: {
+      h: "Age Max"
+      n: "age_max"
+      r: false
+      t: "`$INTEGER`"
+    }
+    age_min: {
+      h: "Age Min"
+      n: "age_min"
+      r: false
+      t: "`$INTEGER`"
+    }
+    api_id: {
+      h: "Api Id"
+      n: "api_id"
+      r: false
+      t: "`$STRING`"
+    }
+    audiences: {
+      h: "Audiences"
+      n: "audiences"
+      r: false
+      t: "`$ARRAY`"
+    }
+    description: {
+      h: "Description"
+      n: "description"
+      r: false
+      t: "`$STRING`"
+    }
+    duration_minutes: {
+      h: "Duration Minutes"
+      n: "duration_minutes"
+      r: false
+      t: "`$INTEGER`"
+    }
+    free: {
+      h: "Free"
+      n: "free"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    icon: {
+      h: "Icon"
+      n: "icon"
+      r: false
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      sh: "The stable public game ID (same value as `api_id`), in the form \"MG-*\"."
+      t: "`$STRING`"
+    }
+    keywords: {
+      h: "Keywords"
+      n: "keywords"
+      r: false
+      t: "`$ARRAY`"
+    }
+    skills: {
+      h: "Skills"
+      n: "skills"
+      r: false
+      t: "`$ARRAY`"
+    }
+    slug: {
+      h: "Slug"
+      n: "slug"
+      r: false
+      t: "`$STRING`"
+    }
+    tag: {
+      h: "Tag"
+      n: "tag"
+      r: false
+      t: "`$STRING`"
+    }
+    title: {
+      h: "Title"
+      n: "title"
+      r: false
+      t: "`$STRING`"
+    }
+    type: {
+      h: "Type"
+      n: "type"
+      r: false
+      t: "`$STRING`"
+    }
+    updated_at: {
+      fo: "date-time"
+      h: "Updated At"
+      n: "updated_at"
+      r: false
+      t: "`$STRING`"
+    }
+    url: {
+      h: "Url"
+      n: "url"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "game_detail"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /v1/mindfulness-games"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "audience"
+                or: "audience"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 20
+                k: "query"
+                n: "limit"
+                or: "limit"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                ex: 0
+                k: "query"
+                n: "offset"
+                or: "offset"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                k: "query"
+                n: "skill"
+                or: "skill"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/v1/mindfulness-games"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "mindfulness-games"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /v1/mindfulness-games/{slug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "slug"
+                or: "slug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/v1/mindfulness-games/{slug}"
+          q: {
+            exist: [
+              "slug"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "mindfulness-games"
+            }
+            {
+              var: "slug"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

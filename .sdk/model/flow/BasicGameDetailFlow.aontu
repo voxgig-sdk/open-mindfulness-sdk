@@ -1,0 +1,44 @@
+# BasicGameDetailFlow
+
+main: kit: flow: BasicGameDetailFlow:
+{
+  entity: "game_detail",
+  kind: "basic",
+  name: "BasicGameDetailFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "game_detail_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "game_detail_ref01",
+        srcdatavar: "game_detail_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "game_detail01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-game_detail_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicGameDetailFlow"
+}

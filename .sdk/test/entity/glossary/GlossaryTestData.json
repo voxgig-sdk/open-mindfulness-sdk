@@ -1,0 +1,77 @@
+{
+  "existing": {
+    "glossary": {
+      "GLOSSARY00": {
+        "also_known_as": [],
+        "etymology": "s79",
+        "extended_explanation": [],
+        "id": "GLOSSARY00",
+        "pillar": "s7c",
+        "related_posts": [],
+        "related_terms": [],
+        "slug": "s7f",
+        "summary": "s80",
+        "title": "s81",
+        "type": "s82",
+        "updated_at": "s83"
+      },
+      "GLOSSARY01": {
+        "also_known_as": [],
+        "etymology": "sf1",
+        "extended_explanation": [],
+        "id": "GLOSSARY01",
+        "pillar": "sf4",
+        "related_posts": [],
+        "related_terms": [],
+        "slug": "sf7",
+        "summary": "sf8",
+        "title": "sf9",
+        "type": "sfa",
+        "updated_at": "sfb"
+      },
+      "GLOSSARY02": {
+        "also_known_as": [],
+        "etymology": "s169",
+        "extended_explanation": [],
+        "id": "GLOSSARY02",
+        "pillar": "s16c",
+        "related_posts": [],
+        "related_terms": [],
+        "slug": "s16f",
+        "summary": "s170",
+        "title": "s171",
+        "type": "s172",
+        "updated_at": "s173"
+      }
+    }
+  },
+  "new": {
+    "glossary": {
+      "glossary_ref01": {
+        "also_known_as": [],
+        "etymology": "s1e1",
+        "extended_explanation": [],
+        "pillar": "s1e4",
+        "related_posts": [],
+        "related_terms": [],
+        "slug": "s1e7",
+        "summary": "s1e8",
+        "title": "s1e9",
+        "type": "s1ea",
+        "updated_at": "s1eb"
+      }
+    }
+  },
+  "requests": {
+    "GET /v1/glossary": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /v1/glossary/{slug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

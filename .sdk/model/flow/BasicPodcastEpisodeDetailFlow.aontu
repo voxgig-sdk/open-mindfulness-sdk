@@ -1,0 +1,44 @@
+# BasicPodcastEpisodeDetailFlow
+
+main: kit: flow: BasicPodcastEpisodeDetailFlow:
+{
+  entity: "podcast_episode_detail",
+  kind: "basic",
+  name: "BasicPodcastEpisodeDetailFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "podcast_episode_detail_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "podcast_episode_detail_ref01",
+        srcdatavar: "podcast_episode_detail_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "podcast_episode_detail01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-podcast_episode_detail_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicPodcastEpisodeDetailFlow"
+}

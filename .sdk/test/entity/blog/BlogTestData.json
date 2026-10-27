@@ -1,0 +1,49 @@
+{
+  "existing": {
+    "blog": {
+      "BLOG00": {
+        "canonical_url": "s32",
+        "excerpt": "s33",
+        "id": "BLOG00",
+        "tags": [],
+        "title": "s36"
+      },
+      "BLOG01": {
+        "canonical_url": "s64",
+        "excerpt": "s65",
+        "id": "BLOG01",
+        "tags": [],
+        "title": "s68"
+      },
+      "BLOG02": {
+        "canonical_url": "s96",
+        "excerpt": "s97",
+        "id": "BLOG02",
+        "tags": [],
+        "title": "s9a"
+      }
+    }
+  },
+  "new": {
+    "blog": {
+      "blog_ref01": {
+        "canonical_url": "sc8",
+        "excerpt": "sc9",
+        "tags": [],
+        "title": "scc"
+      }
+    }
+  },
+  "requests": {
+    "GET /v1/blog": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /v1/blog/{slug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

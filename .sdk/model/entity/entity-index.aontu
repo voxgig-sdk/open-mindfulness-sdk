@@ -1,0 +1,12 @@
+# Entity Models
+
+@"./blog.aontu"
+@"./category.aontu"
+@"./citation_detail.aontu"
+@"./game_detail.aontu"
+@"./glossary.aontu"
+@"./health.aontu"
+@"./pancha_vikas_resource.aontu"
+@"./podcast_episode_detail.aontu"
+@"./practice.aontu"
+@"./resource.aontu"

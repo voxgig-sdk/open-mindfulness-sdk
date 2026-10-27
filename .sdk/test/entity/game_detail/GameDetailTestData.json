@@ -1,0 +1,97 @@
+{
+  "existing": {
+    "game_detail": {
+      "GAME_DETAIL00": {
+        "age_max": 170,
+        "age_min": 171,
+        "api_id": "API01",
+        "audiences": [],
+        "description": "sae",
+        "duration_minutes": 175,
+        "free": true,
+        "icon": "sb1",
+        "id": "GAME_DETAIL00",
+        "keywords": [],
+        "skills": [],
+        "slug": "sb5",
+        "tag": "sb6",
+        "title": "sb7",
+        "type": "sb8",
+        "updated_at": "sb9",
+        "url": "sba"
+      },
+      "GAME_DETAIL01": {
+        "age_max": 340,
+        "age_min": 341,
+        "api_id": "API01",
+        "audiences": [],
+        "description": "s158",
+        "duration_minutes": 345,
+        "free": true,
+        "icon": "s15b",
+        "id": "GAME_DETAIL01",
+        "keywords": [],
+        "skills": [],
+        "slug": "s15f",
+        "tag": "s160",
+        "title": "s161",
+        "type": "s162",
+        "updated_at": "s163",
+        "url": "s164"
+      },
+      "GAME_DETAIL02": {
+        "age_max": 510,
+        "age_min": 511,
+        "api_id": "API01",
+        "audiences": [],
+        "description": "s202",
+        "duration_minutes": 515,
+        "free": true,
+        "icon": "s205",
+        "id": "GAME_DETAIL02",
+        "keywords": [],
+        "skills": [],
+        "slug": "s209",
+        "tag": "s20a",
+        "title": "s20b",
+        "type": "s20c",
+        "updated_at": "s20d",
+        "url": "s20e"
+      }
+    }
+  },
+  "new": {
+    "game_detail": {
+      "game_detail_ref01": {
+        "age_max": 680,
+        "age_min": 681,
+        "api_id": "API01",
+        "audiences": [],
+        "description": "s2ac",
+        "duration_minutes": 685,
+        "free": true,
+        "icon": "s2af",
+        "keywords": [],
+        "skills": [],
+        "slug": "s2b3",
+        "tag": "s2b4",
+        "title": "s2b5",
+        "type": "s2b6",
+        "updated_at": "s2b7",
+        "url": "s2b8"
+      }
+    }
+  },
+  "requests": {
+    "GET /v1/mindfulness-games": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /v1/mindfulness-games/{slug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

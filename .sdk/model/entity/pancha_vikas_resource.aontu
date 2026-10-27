@@ -1,0 +1,91 @@
+# Entity: pancha_vikas_resource
+
+main: kit: entity: pancha_vikas_resource: {
+
+  alias: field: {}
+
+  fields: {
+    download_url: {
+      h: "Download Url"
+      n: "download_url"
+      r: false
+      sh: "Present only on the panchavikas_download item."
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+    source_url: {
+      h: "Source Url"
+      n: "source_url"
+      r: false
+      t: "`$STRING`"
+    }
+    summary: {
+      h: "Summary"
+      n: "summary"
+      r: false
+      t: "`$STRING`"
+    }
+    title: {
+      h: "Title"
+      n: "title"
+      r: false
+      t: "`$STRING`"
+    }
+    type: {
+      h: "Type"
+      n: "type"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "pancha_vikas_resource"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /v1/panchavikas/resources"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/v1/panchavikas/resources"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "panchavikas"
+            }
+            {
+              lit: "resources"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

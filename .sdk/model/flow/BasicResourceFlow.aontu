@@ -1,0 +1,22 @@
+# BasicResourceFlow
+
+main: kit: flow: BasicResourceFlow:
+{
+  entity: "resource",
+  kind: "basic",
+  name: "BasicResourceFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "resource_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicResourceFlow"
+}

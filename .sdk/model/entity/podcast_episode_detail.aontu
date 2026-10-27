@@ -1,0 +1,261 @@
+# Entity: podcast_episode_detail
+
+main: kit: entity: podcast_episode_detail: {
+
+  alias: field: {}
+
+  fields: {
+    alternate_language_id: {
+      h: "Alternate Language Id"
+      n: "alternate_language_id"
+      r: false
+      sh: "The same episode in the other language."
+      t: "`$STRING`"
+    }
+    audience: {
+      h: "Audience"
+      n: "audience"
+      r: false
+      t: "`$STRING`"
+    }
+    duration_iso: {
+      h: "Duration Iso"
+      n: "duration_iso"
+      r: false
+      t: "`$STRING`"
+    }
+    duration_seconds: {
+      h: "Duration Seconds"
+      n: "duration_seconds"
+      r: false
+      t: "`$INTEGER`"
+    }
+    episode_number: {
+      h: "Episode Number"
+      n: "episode_number"
+      r: false
+      t: "`$INTEGER`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+    key_question: {
+      h: "Key Question"
+      n: "key_question"
+      r: false
+      t: "`$STRING`"
+    }
+    language: {
+      h: "Language"
+      n: "language"
+      r: false
+      t: "`$STRING`"
+    }
+    release_date: {
+      fo: "date"
+      h: "Release Date"
+      n: "release_date"
+      r: false
+      t: "`$STRING`"
+    }
+    season_number: {
+      h: "Season Number"
+      n: "season_number"
+      r: false
+      t: "`$INTEGER`"
+    }
+    season_title: {
+      h: "Season Title"
+      n: "season_title"
+      r: false
+      t: "`$STRING`"
+    }
+    short_title: {
+      h: "Short Title"
+      n: "short_title"
+      r: false
+      t: "`$STRING`"
+    }
+    slug: {
+      h: "Slug"
+      n: "slug"
+      r: false
+      t: "`$STRING`"
+    }
+    summary: {
+      h: "Summary"
+      n: "summary"
+      r: false
+      sh: "The episode's short quick-answer summary."
+      t: "`$STRING`"
+    }
+    title: {
+      h: "Title"
+      n: "title"
+      r: false
+      t: "`$STRING`"
+    }
+    type: {
+      h: "Type"
+      n: "type"
+      r: false
+      t: "`$STRING`"
+    }
+    updated_at: {
+      fo: "date-time"
+      h: "Updated At"
+      n: "updated_at"
+      r: false
+      t: "`$STRING`"
+    }
+    url: {
+      fo: "uri"
+      h: "Url"
+      n: "url"
+      r: false
+      sh: "The episode page on theholisticcare.com."
+      t: "`$STRING`"
+    }
+    youtube_url: {
+      fo: "uri"
+      h: "Youtube Url"
+      n: "youtube_url"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "podcast_episode_detail"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /v1/podcast/episodes"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "lang"
+                or: "lang"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 20
+                k: "query"
+                n: "limit"
+                or: "limit"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                ex: 0
+                k: "query"
+                n: "offset"
+                or: "offset"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                k: "query"
+                n: "season"
+                or: "season"
+                r: false
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/v1/podcast/episodes"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "podcast"
+            }
+            {
+              lit: "episodes"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /v1/podcast/episodes/{id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/v1/podcast/episodes/{id}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "podcast"
+            }
+            {
+              lit: "episodes"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

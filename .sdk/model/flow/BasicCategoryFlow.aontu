@@ -1,0 +1,28 @@
+# BasicCategoryFlow
+
+main: kit: flow: BasicCategoryFlow:
+{
+  entity: "category",
+  kind: "basic",
+  name: "BasicCategoryFlow",
+  step: [
+    {
+      i: {
+        ref: "category_ref01",
+        srcdatavar: "category_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-category_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicCategoryFlow"
+}

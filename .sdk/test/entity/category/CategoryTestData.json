@@ -1,0 +1,40 @@
+{
+  "existing": {
+    "category": {
+      "CATEGORY00": {
+        "glossary": {},
+        "note": "s1f",
+        "whitepapers": {},
+        "id": "CATEGORY00"
+      },
+      "CATEGORY01": {
+        "glossary": {},
+        "note": "s3d",
+        "whitepapers": {},
+        "id": "CATEGORY01"
+      },
+      "CATEGORY02": {
+        "glossary": {},
+        "note": "s5b",
+        "whitepapers": {},
+        "id": "CATEGORY02"
+      }
+    }
+  },
+  "new": {
+    "category": {
+      "category_ref01": {
+        "glossary": {},
+        "note": "s79",
+        "whitepapers": {}
+      }
+    }
+  },
+  "requests": {
+    "GET /v1/categories": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

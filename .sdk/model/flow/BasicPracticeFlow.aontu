@@ -1,0 +1,44 @@
+# BasicPracticeFlow
+
+main: kit: flow: BasicPracticeFlow:
+{
+  entity: "practice",
+  kind: "basic",
+  name: "BasicPracticeFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "practice_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "practice_ref01",
+        srcdatavar: "practice_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "practice01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-practice_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicPracticeFlow"
+}

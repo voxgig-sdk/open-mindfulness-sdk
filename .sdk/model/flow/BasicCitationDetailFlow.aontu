@@ -1,0 +1,44 @@
+# BasicCitationDetailFlow
+
+main: kit: flow: BasicCitationDetailFlow:
+{
+  entity: "citation_detail",
+  kind: "basic",
+  name: "BasicCitationDetailFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "citation_detail_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "citation_detail_ref01",
+        srcdatavar: "citation_detail_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "citation_detail01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-citation_detail_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicCitationDetailFlow"
+}

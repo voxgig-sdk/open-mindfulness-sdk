@@ -1,0 +1,238 @@
+# Entity: citation_detail
+
+main: kit: entity: citation_detail: {
+
+  alias: field: {}
+
+  fields: {
+    authors: {
+      h: "Authors"
+      n: "authors"
+      r: false
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      sh: "Deterministic public ID in the form \"research:<slug>\"."
+      t: "`$STRING`"
+    }
+    journal: {
+      h: "Journal"
+      n: "journal"
+      r: false
+      t: "`$STRING`"
+    }
+    key_finding: {
+      h: "Key Finding"
+      n: "key_finding"
+      r: false
+      t: "`$STRING`"
+    }
+    limitations: {
+      h: "Limitations"
+      n: "limitations"
+      r: false
+      t: "`$STRING`"
+    }
+    related_posts: {
+      h: "Related Posts"
+      n: "related_posts"
+      r: false
+      t: "`$ARRAY`"
+    }
+    related_terms: {
+      h: "Related Terms"
+      n: "related_terms"
+      r: false
+      t: "`$ARRAY`"
+    }
+    sample_size: {
+      h: "Sample Size"
+      n: "sample_size"
+      r: false
+      t: "`$STRING`"
+    }
+    slug: {
+      h: "Slug"
+      n: "slug"
+      r: false
+      t: "`$STRING`"
+    }
+    source_url: {
+      h: "Source Url"
+      n: "source_url"
+      r: false
+      t: "`$STRING`"
+    }
+    study_type: {
+      h: "Study Type"
+      n: "study_type"
+      r: false
+      t: "`$STRING`"
+    }
+    summary: {
+      h: "Summary"
+      n: "summary"
+      r: false
+      t: "`$STRING`"
+    }
+    title: {
+      h: "Title"
+      n: "title"
+      r: false
+      t: "`$STRING`"
+    }
+    topic: {
+      h: "Topic"
+      n: "topic"
+      r: false
+      t: "`$STRING`"
+    }
+    type: {
+      h: "Type"
+      n: "type"
+      r: false
+      t: "`$STRING`"
+    }
+    updated_at: {
+      fo: "date-time"
+      h: "Updated At"
+      n: "updated_at"
+      r: false
+      t: "`$STRING`"
+    }
+    year: {
+      h: "Year"
+      n: "year"
+      r: false
+      t: "`$INTEGER`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "citation_detail"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /v1/whitepapers"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: 20
+                k: "query"
+                n: "limit"
+                or: "limit"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                ex: 0
+                k: "query"
+                n: "offset"
+                or: "offset"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                k: "query"
+                n: "study_type"
+                or: "study_type"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "topic"
+                or: "topic"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/v1/whitepapers"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "whitepapers"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /v1/whitepapers/{slug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "slug"
+                or: "slug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/v1/whitepapers/{slug}"
+          q: {
+            exist: [
+              "slug"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "whitepapers"
+            }
+            {
+              var: "slug"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

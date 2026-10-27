@@ -1,0 +1,44 @@
+# BasicGlossaryFlow
+
+main: kit: flow: BasicGlossaryFlow:
+{
+  entity: "glossary",
+  kind: "basic",
+  name: "BasicGlossaryFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "glossary_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "glossary_ref01",
+        srcdatavar: "glossary_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "glossary01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-glossary_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicGlossaryFlow"
+}

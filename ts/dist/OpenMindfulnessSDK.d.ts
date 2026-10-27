@@ -1,0 +1,65 @@
+import { BlogEntity } from './entity/BlogEntity';
+import { CategoryEntity } from './entity/CategoryEntity';
+import { CitationDetailEntity } from './entity/CitationDetailEntity';
+import { GameDetailEntity } from './entity/GameDetailEntity';
+import { GlossaryEntity } from './entity/GlossaryEntity';
+import { HealthEntity } from './entity/HealthEntity';
+import { PanchaVikasResourceEntity } from './entity/PanchaVikasResourceEntity';
+import { PodcastEpisodeDetailEntity } from './entity/PodcastEpisodeDetailEntity';
+import { PracticeEntity } from './entity/PracticeEntity';
+import { ResourceEntity } from './entity/ResourceEntity';
+export type * from './OpenMindfulnessTypes';
+import { inspect } from 'node:util';
+import type { Context, Feature } from './types';
+import { config } from './Config';
+import { OpenMindfulnessEntityBase } from './OpenMindfulnessEntityBase';
+import { Utility } from './utility/Utility';
+import { BaseFeature } from './feature/base/BaseFeature';
+declare const stdutil: Utility;
+type DirectResult = {
+    ok: false;
+    err: any;
+    status?: undefined;
+    headers?: undefined;
+    data?: undefined;
+} | {
+    ok: boolean;
+    status: number;
+    headers: any;
+    data: any;
+    err?: any;
+};
+declare class OpenMindfulnessSDK {
+    _mode: string;
+    _options: any;
+    _utility: Utility;
+    _features: Feature[];
+    _rootctx: Context;
+    constructor(options?: any);
+    options(): any;
+    utility(): any;
+    prepare(fetchargs?: any): Promise<any>;
+    direct(fetchargs?: any): Promise<DirectResult>;
+    _rawRequest(fetchargs?: any): Promise<DirectResult>;
+    graphql(query: string, variables?: any, ctrl?: any): Promise<any>;
+    Blog(entopts?: Record<string, any>): BlogEntity;
+    Category(entopts?: Record<string, any>): CategoryEntity;
+    CitationDetail(entopts?: Record<string, any>): CitationDetailEntity;
+    GameDetail(entopts?: Record<string, any>): GameDetailEntity;
+    Glossary(entopts?: Record<string, any>): GlossaryEntity;
+    Health(entopts?: Record<string, any>): HealthEntity;
+    PanchaVikasResource(entopts?: Record<string, any>): PanchaVikasResourceEntity;
+    PodcastEpisodeDetail(entopts?: Record<string, any>): PodcastEpisodeDetailEntity;
+    Practice(entopts?: Record<string, any>): PracticeEntity;
+    Resource(entopts?: Record<string, any>): ResourceEntity;
+    static test(testoptsarg?: any, sdkoptsarg?: any): OpenMindfulnessSDK;
+    tester(testopts?: any, sdkopts?: any): OpenMindfulnessSDK;
+    toJSON(): {
+        name: string;
+    };
+    toString(): string;
+    [inspect.custom](): string;
+}
+declare const SDK: typeof OpenMindfulnessSDK;
+export { stdutil, config, BaseFeature, OpenMindfulnessEntityBase, OpenMindfulnessSDK, SDK, };
+export type { DirectResult };

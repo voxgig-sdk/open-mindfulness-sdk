@@ -1,0 +1,226 @@
+
+
+import Path from 'node:path'
+import * as Fs from 'node:fs'
+
+import { test, describe, afterEach } from 'node:test'
+import assert from 'node:assert'
+import { createLiveTransport } from '../../live-runner'
+import { runLiveEntity } from '../../live-entity'
+
+
+import { OpenMindfulnessSDK, BaseFeature, config, stdutil } from '../../..'
+
+import {
+  envOverride,
+  liveClientOptions,
+  liveDelay,
+  loadEnvLocal,
+  makeCtrl,
+  makeMatch,
+  makeReqdata,
+  makeStepData,
+  makeValid,
+  maybeSkipControl,
+} from '../../utility'
+
+
+loadEnvLocal(__dirname + '/../../../.env.local')
+
+
+describe('GlossaryEntity', async () => {
+
+  // Per-test live pacing. Delay is read from sdk-test-control.json's
+  // `test.live.delayMs`; only sleeps when OPEN_MINDFULNESS_TEST_LIVE=TRUE.
+  afterEach(liveDelay('OPEN_MINDFULNESS_TEST_LIVE'))
+
+  test('instance', async () => {
+    const testsdk = OpenMindfulnessSDK.test()
+    const ent = testsdk.Glossary()
+    assert(null != ent)
+  })
+
+
+  class FailHook extends BaseFeature {
+    name = 'failhook'
+    version = '0.0.1'
+    active = true
+    unexpected = 0
+    init() { }
+    PreSpec() { throw new Error('glossary hook failed') }
+    PreUnexpected() { this.unexpected++ }
+  }
+
+  test('stream-error', async () => {
+    const offline = { net: { offline: true } }
+    await assert.rejects(async () => {
+      for await (const _item of OpenMindfulnessSDK.test(offline).Glossary().stream('list')) { }
+    }, /offline/)
+
+    for await (const _item of OpenMindfulnessSDK.test(offline).Glossary()
+      .stream('list', undefined, { ctrl: { throw: false } })) { }
+
+    if (null != (config as any).feature?.rbac) {
+      const denied = OpenMindfulnessSDK.test(undefined, { feature: { rbac: { active: true, deny: true } } })
+      await assert.rejects(async () => {
+        for await (const _item of denied.Glossary().stream('list')) { }
+      }, (err: any) => 'rbac_denied' === err.code)
+    }
+  })
+
+  test('stream-ctrl', async () => {
+    const explain: any = {}
+    const ctrl: any = { explain }
+    for await (const _item of OpenMindfulnessSDK.test().Glossary().stream('list', undefined, { ctrl })) { }
+    assert.deepStrictEqual(Object.keys(ctrl), ['explain'])
+    assert(explain === ctrl.explain && 0 < Object.keys(explain).length)
+  })
+
+  test('unexpected', async () => {
+    const hook = new FailHook()
+    const client = new OpenMindfulnessSDK({ feature: { test: { active: true } }, extend: [hook] })
+    await assert.rejects(client.Glossary().list(), /hook failed/)
+    assert(0 < hook.unexpected)
+
+    const fired = hook.unexpected
+    assert.strictEqual(await client.Glossary().list(undefined, { throw: false }), undefined)
+    assert(fired < hook.unexpected)
+  })
+
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = OpenMindfulnessSDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.Glossary().list({"limit":"x"} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
+  test('basic', async (t) => {
+
+    const live = 'TRUE' === process.env.OPEN_MINDFULNESS_TEST_LIVE
+    for (const op of ['list', 'load']) {
+      if (!live && maybeSkipControl(t, 'entityOp', 'glossary.' + op, live)) return
+    }
+
+    
+    const setup = basicSetup()
+    if (setup.live) {
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"also_known_as":{"a":true,"h":"Also Known As","n":"also_known_as","r":false,"t":"`$ARRAY`","key$":"also_known_as","index$":0},"etymology":{"a":true,"h":"Etymology","n":"etymology","r":false,"t":"`$STRING`","key$":"etymology","index$":1},"extended_explanation":{"a":true,"h":"Extended Explanation","n":"extended_explanation","r":false,"sh":"A small Portable Text block array (Sanity's rich-text format), not plain HTML or Markdown.","t":"`$ARRAY`","key$":"extended_explanation","index$":2},"id":{"a":true,"h":"Id","n":"id","r":false,"sh":"Deterministic public ID in the form \"glossary:<slug>\".","t":"`$STRING`","key$":"id","index$":3},"pillar":{"a":true,"h":"Pillar","n":"pillar","r":false,"t":"`$STRING`","key$":"pillar","index$":4},"related_posts":{"a":true,"h":"Related Posts","n":"related_posts","r":false,"t":"`$ARRAY`","key$":"related_posts","index$":5},"related_terms":{"a":true,"h":"Related Terms","n":"related_terms","r":false,"t":"`$ARRAY`","key$":"related_terms","index$":6},"slug":{"a":true,"h":"Slug","n":"slug","r":false,"t":"`$STRING`","key$":"slug","index$":7},"summary":{"a":true,"h":"Summary","n":"summary","r":false,"t":"`$STRING`","key$":"summary","index$":8},"title":{"a":true,"h":"Title","n":"title","r":false,"t":"`$STRING`","key$":"title","index$":9},"type":{"a":true,"h":"Type","n":"type","r":false,"t":"`$STRING`","key$":"type","index$":10},"updated_at":{"a":true,"fo":"date-time","h":"Updated At","n":"updated_at","r":false,"t":"`$STRING`","key$":"updated_at","index$":11}},"id":{"field":"id","name":"id"},"name":"glossary","op":{"list":{"input":"data","name":"list","points":[{"a":true,"co":{"id":"GET /v1/glossary","source":"openapi3","version":2},"g":{"query":[{"a":true,"ex":20,"k":"query","n":"limit","or":"limit","r":false,"t":"`$INTEGER`","index$":0},{"a":true,"ex":0,"k":"query","n":"offset","or":"offset","r":false,"t":"`$INTEGER`","index$":1},{"a":true,"k":"query","n":"pillar","or":"pillar","r":false,"t":"`$STRING`","index$":2}]},"k":"http","m":"GET","o":"/v1/glossary","q":{},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"v1"},{"lit":"glossary"}],"t":{"req":"`reqdata`","res":"`body.data`"},"index$":0}],"key$":"list"},"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /v1/glossary/{slug}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"id","or":"slug","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/v1/glossary/{slug}","q":{"exist":["id"]},"r":{"param":{"slug":"id"}},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"v1"},{"lit":"glossary"},{"var":"id"}],"t":{"req":"`reqdata`","res":"`body.data`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"glossary","name__orig":"glossary","Name":"Glossary","name_":"glossary","name-":"glossary","NAME":"GLOSSARY","index$":4}, {"active":true,"entity":"glossary","key$":"BasicGlossaryFlow","kind":"basic","name":"BasicGlossaryFlow","param":{},"step":[{"a":true,"d":{},"i":{},"m":{},"o":"list","s":[],"v":[{"apply":"ItemExists","def":{"ref":"glossary_ref01"}}],"index$":0},{"a":true,"d":{},"i":{"ref":"glossary_ref01","srcdatavar":"glossary_ref01_data","suffix":"_dt0"},"m":{"id":"glossary01"},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-glossary_ref01"}}],"index$":1,"route":"GET /v1/glossary/{slug}","record":{}}]}, 'Glossary', {"GET /v1/glossary":{"protocol":"http","parameters":[{"name":"limit","in":"query","description":"Max records to return (default 20). A non-numeric, non-integer, or non-positive value (e.g. `abc`, `1.5`, `0`, `-1`) returns a 400 `invalid_parameter` error rather than silently falling back to the default. A value above the documented maximum (100) is the one exception: it is NOT an error, it is silently clamped to 100 — see /docs#pagination for the full rationale for that one intentional exception.\n","schema":{"type":"integer","default":20,"maximum":100},"x-ref":"#/components/parameters/limit","index$":0},{"name":"offset","in":"query","description":"Records to skip (default 0). A non-numeric, non-integer, or negative value (e.g. `abc`, `1.5`, `-1`) returns a 400 `invalid_parameter` error rather than silently falling back to 0 — see /docs#pagination.\n","schema":{"type":"integer","default":0},"x-ref":"#/components/parameters/offset","index$":1},{"name":"pillar","in":"query","schema":{"type":"string","enum":["nonduality","yoga","meditation","kundalini","ayurveda","general-wisdom"]},"index$":2}]},"GET /v1/glossary/{slug}":{"protocol":"http","parameters":[{"name":"slug","in":"path","required":true,"schema":{"type":"string"},"x-ref":"#/components/parameters/slug","index$":0}]}}, { strict: LIVE_STRICT, t })
+    }
+    const client = setup.client
+    const struct = setup.struct
+
+    const isempty = struct.isempty
+    const select = struct.select
+
+    let glossary_ref01_data = Object.values(setup.data.existing.glossary)[0] as any
+
+    // LIST
+    const glossary_ref01_ent = client.Glossary()
+    const glossary_ref01_match: any = {}
+
+    const glossary_ref01_list = (await glossary_ref01_ent.list(glossary_ref01_match)).map((e: any) => e.data())
+
+
+    // LOAD
+    const glossary_ref01_match_dt0: any = {}
+    glossary_ref01_match_dt0.id = glossary_ref01_data.id
+    const glossary_ref01_data_dt0 = (await glossary_ref01_ent.load(glossary_ref01_match_dt0)).data()
+    assert(glossary_ref01_data_dt0.id === glossary_ref01_data.id)
+
+
+  })
+})
+
+
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
+
+function basicSetup(extra?: any) {
+  // TODO: fix test def options
+  const options: any = {} // null
+
+  // TODO: needs test utility to resolve path
+  const entityDataFile =
+    Path.resolve(__dirname, 
+      '../../../../.sdk/test/entity/glossary/GlossaryTestData.json')
+
+  // TODO: file ready util needed?
+  const entityDataSource = Fs.readFileSync(entityDataFile).toString('utf8')
+
+  // TODO: need a xlang JSON parse utility in voxgig/struct with better error msgs
+  const entityData = JSON.parse(entityDataSource)
+
+  options.entity = entityData.existing
+
+  let client = OpenMindfulnessSDK.test(options, extra)
+  const struct = client.utility().struct
+  const merge = struct.merge
+  const transform = struct.transform
+
+  let idmap = transform(
+    ['glossary01','glossary02','glossary03'],
+    {
+      '`$PACK`': ['', {
+        '`$KEY`': '`$COPY`',
+        '`$VAL`': ['`$FORMAT`', 'upper', '`$COPY`']
+      }]
+    })
+
+  const env = envOverride({
+    'OPEN_MINDFULNESS_TEST_GLOSSARY_ENTID': idmap,
+    'OPEN_MINDFULNESS_TEST_LIVE': 'FALSE',
+    'OPEN_MINDFULNESS_TEST_EXPLAIN': 'FALSE',
+  })
+
+  idmap = env['OPEN_MINDFULNESS_TEST_GLOSSARY_ENTID']
+
+  const live = 'TRUE' === env.OPEN_MINDFULNESS_TEST_LIVE
+
+  const transport = createLiveTransport()
+  if (live) {
+    const rawIds = process.env['OPEN_MINDFULNESS_TEST_GLOSSARY_ENTID']
+    idmap = rawIds && rawIds.trim() ? JSON.parse(rawIds) : {}
+    if (!idmap || Array.isArray(idmap) || typeof idmap !== 'object') {
+      throw new Error('Live ENTID must be a JSON object')
+    }
+    client = new OpenMindfulnessSDK(merge([
+      // FIRST, so the generated fields below win: sdk-test-control.json's
+      // test.client.options adds to the live client, it does not redirect it.
+      liveClientOptions(),
+      {
+      },
+      // 'extra || {}', not a bare 'extra': struct.merge returns UNDEFINED when the
+      // last entry is undefined, and basicSetup is normally called with no
+      // argument at all - so a bare 'extra' silently discarded the apikey
+      // and server values above and handed the SDK undefined. Harmless
+      // while there was nothing in that object; not harmless now.
+      extra || {},
+      { system: { fetch: transport.fetch } }
+    ]))
+  }
+
+  const setup = {
+    idmap,
+    env,
+    options,
+    client,
+    struct,
+    data: entityData,
+    explain: 'TRUE' === env.OPEN_MINDFULNESS_TEST_EXPLAIN,
+    live,
+    transport,
+    now: Date.now(),
+  }
+
+  return setup
+}
+  
